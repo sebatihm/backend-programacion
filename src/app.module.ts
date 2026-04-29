@@ -4,6 +4,11 @@ import { datasourceConfig } from './db/data-source';
 import { ConfigModule } from '@nestjs/config';
 import { RoomModule } from './room/room.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { RolesModule } from './roles/roles.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 @Module({
   imports: [
@@ -11,8 +16,16 @@ import { ScheduleModule } from './schedule/schedule.module';
     TypeOrmModule.forRoot(datasourceConfig),
     RoomModule,
     ScheduleModule,
+    AuthModule,
+    UserModule,
+    RolesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useExisting: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
