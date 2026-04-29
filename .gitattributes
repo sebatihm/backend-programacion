@@ -1,0 +1,10 @@
+# Todo lo necesario para el backend
+* text=auto
+
+# Específico para entrypoint.sh
+entrypoint.sh text eol=lf
+*.sh text eol=lf
+
+# Docker files
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
