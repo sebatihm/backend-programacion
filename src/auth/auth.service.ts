@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/login.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
+import { LoginForm } from './dto/login.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private jtwService: JwtService,
+  ) {}
+  async login(loginForm: LoginForm) {
+    try {
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .leftJoinAndSelect('user.role', 'role')
+        .leftJoinAndSelect('role.permissions', 'permissions')
+        .where('user.email = :email', { email: loginForm.email })
+        .getOne();
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+      if (!user) throw new HttpException('Credenciales invalidas', 401);
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+      const isMatch = await bcrypt.compare(loginForm.password, user.password);
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+      if (!isMatch) {
+        throw new HttpException('Credenciales invalidas', 401);
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+      const payload = {
+        issuer: user.id,
+        user_name: `${user.name} ${user.last_name} ${user.last_mother_name}`,
+        role: user.role.name,
+        permissions: user.role.permissions.map((e) => e.name),
+      };
+
+      const token = this.jtwService.signAsync(payload);
+      return token;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      } else {
+        console.log(error);
+        throw new InternalServerErrorException('Error al validar el token');
+      }
+    }
   }
 }

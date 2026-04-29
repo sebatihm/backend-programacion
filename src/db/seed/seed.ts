@@ -3,6 +3,7 @@
 import dataSource from '../data-source';
 import { seedPermissions } from './seedPermissions.seeder';
 import { seedRoles } from './seedRoles.seeder';
+import { seedUserAdmin } from './seedUser.seeder';
 
 async function runSeed() {
   console.log('Initializing all seeders to the provided datasource');
@@ -10,7 +11,7 @@ async function runSeed() {
 
   await seedPermissions(dataSource);
   await seedRoles(dataSource);
-
+  await seedUserAdmin(dataSource);
   await dataSource.destroy();
   console.log('Completed all the seeders!');
 }

@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { seedCheckStatus } from './utils/seedStatus';
-import { Role } from 'src/roles/entities/role.entity';
-import { Permission } from 'src/roles/entities/permission.entity';
+import { Role } from '../../roles/entities/role.entity';
+import { Permission } from '../../roles/entities/permission.entity';
 
 export async function seedRoles(dataSource: DataSource) {
   console.log('Seeding roles into the database ....');
