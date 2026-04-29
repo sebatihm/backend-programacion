@@ -1,5 +1,5 @@
 import { IsOptional } from "class-validator";
-import { Schedule } from "src/schedule/entities/schedule.entity";
+import { Schedule } from "../../schedule/entities/schedule.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

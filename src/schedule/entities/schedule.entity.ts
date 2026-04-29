@@ -1,5 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import { Room } from "src/room/entities/room.entity";
+import { Room } from "../../room/entities/room.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
