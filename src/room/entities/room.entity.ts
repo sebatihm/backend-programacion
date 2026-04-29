@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsOptional } from "class-validator";
 import { Schedule } from "src/schedule/entities/schedule.entity";
-import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Room {
     @PrimaryGeneratedColumn()
     room_id: number;
@@ -19,7 +20,7 @@ export class Room {
     @IsOptional()
     comments: string;
 
-    @OneToMany(() => Schedule, (schedule) => schedule.room_id)
+    @OneToMany(() => Schedule, (schedule) => schedule.room)
     schedules: Schedule[];
 
 }

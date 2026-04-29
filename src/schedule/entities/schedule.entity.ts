@@ -1,7 +1,8 @@
 import { IsNotEmpty } from "class-validator";
 import { Room } from "src/room/entities/room.entity";
-import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Schedule {
     @PrimaryGeneratedColumn()
     schedule_id: number;
@@ -20,5 +21,5 @@ export class Schedule {
 
     @ManyToOne(() => Room ,(room) => room.room_id)
     @JoinColumn({ name: 'room_id' })
-    room_id: number;
+    room: Room;
 }
